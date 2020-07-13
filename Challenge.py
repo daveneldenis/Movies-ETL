@@ -137,7 +137,7 @@ def etl(wiki,kaggle,movie_lens):
 
     ##Directors and IMDB Link. and Number of Episodes
     wiki_movies = [movie for movie in wiki_movies_raw
-                if ('Director' in movie or 'Directed by' in movie)
+                    if ('Director' in movie or 'Directed by' in movie)
                     and 'imdb_link' in movie
                     and 'No. of episodes' not in movie]
 
@@ -153,9 +153,13 @@ def etl(wiki,kaggle,movie_lens):
 
 
     wiki_movies_df['imdb_id'] = wiki_movies_df['imdb_link'].str.extract(r'(tt\d{7})')
-
-    wiki_movies_df.drop_duplicates(subset='imdb_id', inplace=True)
-
+    for entry in wiki_movies_df:
+        try:
+            print(wiki_movies_df)
+            wiki_movies_df.drop_duplicates(subset='imdb_id', inplace=True)
+        except:
+            print('Next entry')
+        print(wiki_movies_df)
 
     # In[ ]:
 
