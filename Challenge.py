@@ -33,9 +33,9 @@ def clean_movie(movie):
         movie['alt_titles'] = alt_titles
 
     # merge column names
-def change_column_name(old_name, new_name):
-    if old_name in movie:
-        movie[new_name] = movie.pop(old_name)
+    def change_column_name(old_name, new_name):
+        if old_name in movie:
+            movie[new_name] = movie.pop(old_name)
     change_column_name('Adaptation by', 'Writer(s)')
     change_column_name('Country of origin', 'Country')
     change_column_name('Directed by', 'Director')
@@ -117,7 +117,7 @@ def etl(wiki,kaggle,movie_lens):
 
     with open(wiki, mode='r') as file:
         wiki_movies_raw = json.load(file)
-
+    
 
     # In[ ]:
 
@@ -140,26 +140,25 @@ def etl(wiki,kaggle,movie_lens):
                     if ('Director' in movie or 'Directed by' in movie)
                     and 'imdb_link' in movie
                     and 'No. of episodes' not in movie]
-
+    
 
     # In[ ]:
 
 
     clean_movies = [clean_movie(movie) for movie in wiki_movies]
     wiki_movies_df = pd.DataFrame(clean_movies)
-
+    
 
     # In[ ]:
 
 
-    wiki_movies_df['imdb_id'] = wiki_movies_df['imdb_link'].str.extract(r'(tt\d{7})')
-    for entry in wiki_movies_df:
-        try:
-            print(wiki_movies_df)
-            wiki_movies_df.drop_duplicates(subset='imdb_id', inplace=True)
-        except:
-            print('Next entry')
-        print(wiki_movies_df)
+   
+    try:
+        wiki_movies_df['imdb_id'] = wiki_movies_df['imdb_link'].str.extract(r'(tt\d{7})')
+        wiki_movies_df.drop_duplicates(subset='imdb_id', inplace=True)
+    except Exception as e:
+        print(e)
+    
 
     # In[ ]:
 
